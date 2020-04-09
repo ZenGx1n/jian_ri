@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jianri.dao.WordsMapper" >
+  <resultMap id="BaseResultMap" type="com.jianri.pojo.Words" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="word" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="pseudonym" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="definition" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="pronunciation" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="example" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, word, pseudonym, definition, pronunciation, example
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from words
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from words
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jianri.pojo.Words" >
+    insert into words (id, word, definition, 
+      pronunciation, example)
+    values (#{id,jdbcType=INTEGER}, #{word,jdbcType=VARCHAR}, #{pseudonym, jdbcType=VARCHAR},
+      #{definition,jdbcType=VARCHAR}, #{pronunciation,jdbcType=VARCHAR}, #{example,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jianri.pojo.Words" >
+    insert into words
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="word != null" >
+        word,
+      </if>
+      <if test="pseudonym != null" >
+        pseudonym,
+      </if>
+      <if test="definition != null" >
+        definition,
+      </if>
+      <if test="pronunciation != null" >
+        pronunciation,
+      </if>
+      <if test="example != null" >
+        example,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="word != null" >
+        #{word,jdbcType=VARCHAR},
+      </if>
+      <if test="pseudonym != null" >
+        #{pseudonym,jdbcType=VARCHAR},
+      </if>
+      <if test="definition != null" >
+        #{definition,jdbcType=VARCHAR},
+      </if>
+      <if test="pronunciation != null" >
+        #{pronunciation,jdbcType=VARCHAR},
+      </if>
+      <if test="example != null" >
+        #{example,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jianri.pojo.Words" >
+    update words
+    <set >
+      <if test="word != null" >
+        word = #{word,jdbcType=VARCHAR},
+      </if>
+      <if test="pseudonym != null" >
+        pseudonym = #{pseudonym,jdbcType=VARCHAR},
+      </if>
+      <if test="definition != null" >
+        definition = #{definition,jdbcType=VARCHAR},
+      </if>
+      <if test="pronunciation != null" >
+        pronunciation = #{pronunciation,jdbcType=VARCHAR},
+      </if>
+      <if test="example != null" >
+        example = #{example,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jianri.pojo.Words" >
+    update words
+    set word = #{word,jdbcType=VARCHAR},
+      pseudonym = #{pseudonym,jdbcType=VARCHAR},
+      definition = #{definition,jdbcType=VARCHAR},
+      pronunciation = #{pronunciation,jdbcType=VARCHAR},
+      example = #{example,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getTotalWords" resultType="int">
+    select count(id)
+    from words
+  </select>
+
+  <select id="selectAllByCollectionIds" parameterType="list" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from words
+    where id in
+    <foreach collection="collectionIds" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    order by id asc
+  </select>
+</mapper>
